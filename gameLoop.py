@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from re import X
 import pygame
 from border import Border
@@ -20,8 +19,7 @@ class GameLoop():
         pygame.display.set_caption("Game")
         FPS = 60
         fpsClock = pygame.time.Clock()
-
-        backGround = Rectangle(self.screen,(0,0,0),(0,0,0),0,0,pygame.display.get_window_size()[0],pygame.display.get_window_size()[1], 0)
+        
         gameMode = GameMode(0,self.screen)
 
         drawingLine=False
@@ -119,10 +117,10 @@ class GameLoop():
             elif gameMode.mode == 1 and clickLD and not isThereACar:
                 isThereACar = True
                 self.car = car
-                car = NULL
+                car = None
             elif gameMode.mode ==1 and clickRD and isThereACar:
                 isThereACar=False
-                self.car=NULL
+                self.car=None
             #RunMode
             if isThereACar and gameMode.mode == 2:
                 self.car.update(carButtons)
@@ -132,7 +130,8 @@ class GameLoop():
             if isThereACar:
                 self.car.draw()
             gameMode.drawButtonsAndCurrentMode(clickLD)
-            pygame.display.flip()
             pygame.display.update()
+            pygame.display.flip()
             fpsClock.tick(FPS)
-            backGround.draw() #this will be first rendered after waiting
+            self.screen.fill((0,0,0))
+            
