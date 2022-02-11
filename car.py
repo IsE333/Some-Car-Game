@@ -8,7 +8,7 @@ class Car(Rectangle):
         self.maxSpeed, self.speed = maxSpeed, 0.0
         self.rotation = 0
     def update(self, buttons):
-        free = not (buttons[0] or buttons[1])
+        free = not (buttons[0] or buttons[3])
         if buttons[0] and self.speed<self.maxSpeed:
             self.speed += 0.16
         elif buttons[3] and self.speed>-self.maxSpeed/3:
