@@ -2,8 +2,8 @@ from rectangle import Rectangle
 from textRenderer import TextRenderer
 import pygame
 class Button(Rectangle):
-    def __init__(self, surface, color, bgColor, xPos, yPos, xSize, ySize, text, textSize, rot) -> None:
-        super().__init__(surface, color, bgColor, xPos, yPos, xSize, ySize, rot)
+    def __init__(self, surface, color, xPos, yPos, xSize, ySize, text, textSize, rot) -> None:
+        super().__init__(surface, color, xPos, yPos, xSize, ySize, rot)
         self.text, self.textSize = text, textSize
     def drawAndUpdate(self,isClicked):
         if self.xPos < pygame.mouse.get_pos()[0] < self.xPos + self.xSize and self.yPos < pygame.mouse.get_pos()[1] < self.yPos + self.ySize:
