@@ -14,10 +14,10 @@ class Rectangle(drawable.Drawable):
         p3x,p3y= self.rotate(midX,midY,self.xPos+self.xSize, self.yPos+self.ySize, self.rotation)
         p4x,p4y= self.rotate(midX,midY,self.xPos, self.yPos+self.ySize, self.rotation)
         
-        pygame.draw.line(self.surface, (self.color[0]*2,self.color[1]/2,self.color[2]/2), (p1x,p1y), (p2x,p2y), 1)
-        pygame.draw.line(self.surface, (self.color[0]*2,self.color[1]/2,self.color[2]/2), (p2x,p2y), (p3x,p3y), 1)
-        pygame.draw.line(self.surface, (self.color[0]*2,self.color[1]/2,self.color[2]/2), (p3x,p3y), (p4x,p4y), 1)
-        pygame.draw.line(self.surface, (self.color[0]*2,self.color[1]/2,self.color[2]/2), (p4x,p4y), (p1x,p1y), 1)
+        pygame.draw.line(self.surface, self.color, (p1x,p1y), (p2x,p2y), 2)
+        pygame.draw.line(self.surface, self.color, (p2x,p2y), (p3x,p3y), 2)
+        pygame.draw.line(self.surface, self.color, (p3x,p3y), (p4x,p4y), 2)
+        pygame.draw.line(self.surface, self.color, (p4x,p4y), (p1x,p1y), 2)
     def rotate(self, ox, oy, px, py, angle):
         qx = ox + math.cos(angle) * (px - ox) - math.sin(angle) * (py - oy)
         qy = oy + math.sin(angle) * (px - ox) + math.cos(angle) * (py - oy)

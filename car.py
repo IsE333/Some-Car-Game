@@ -4,8 +4,8 @@ from rectangle import Rectangle
 from textRenderer import TextRenderer
 import pygame
 class Car(Rectangle):
-    def __init__(self, surface, color:tuple, xPos:int, yPos:int, xSize:int, ySize:int, maxSpeed:float, rot:float, isPlaced:bool) -> None:
-        super().__init__(surface, color, xPos, yPos, xSize, ySize, rot)
+    def __init__(self, surface, xPos:int, yPos:int, maxSpeed:float, rot:float, isPlaced:bool) -> None:
+        super().__init__(surface, (0,192,0), xPos, yPos, 32, 64, rot)
         self.maxSpeed, self.speed = maxSpeed, 0.0
         self.rotation = 0
         self.speedMeter = TextRenderer(self.surface,(32,255,32), str(self.speed)[0:6], 32, pygame.display.get_window_size()[0]-110, pygame.display.get_window_size()[1]-50)

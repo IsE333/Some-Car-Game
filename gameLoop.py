@@ -8,13 +8,10 @@ class GameLoop():
     def __init__(self) -> None:
         pygame.init()
         self.cw, self.ch = pygame.display.Info().current_w, pygame.display.Info().current_h
-        self.w, self.h = self.cw,self.ch
-        if self.cw/self.ch > 32/30: self.w,self.h= self.ch*32/30,self.ch
-        if self.cw/self.ch < 32/30: self.w,self.h= self.cw*30/32,self.cw
         self.screen = pygame.display.set_mode((self.cw, self.ch), pygame.FULLSCREEN)
         self.lines = []
         self.deletedLines = []
-        self.car = Car(self.screen,(0,255,0),pygame.mouse.get_pos()[0]-16,pygame.mouse.get_pos()[1]-32, 32, 64, 6.6, 0, False)
+        self.car = Car(self.screen, 0, 0, 6.6, 0, False)
         self.gameMode = GameMode(GameModes.BUILD,self.screen)
         self.drawingLine=False
         self.running = True

@@ -6,7 +6,6 @@ class TextRenderer(Drawable):
         self.text = text
         self.size = size
         self.pos = xPos, yPos
-        pygame.font.init()
     def draw(self):
         myfont = pygame.font.SysFont('Tahoma', self.size)
         textsurface = myfont.render(self.text, True, self.color)
