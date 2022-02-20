@@ -36,33 +36,40 @@ class Car(Rectangle):
         self.xPos += math.sin(self.rotation)*self.speed
         self.speedMeter.text = str(self.speed)[0:6]
         self.speedMeter.draw()
-    def drawRays(self, lines):
-        for L in lines:
-            if L.startPos[0] > L.endPos[0]: 
-                rayX = [x for x in range(L.endPos[0], L.startPos[0]+1)]
-                slope = (L.startPos[1] - L.endPos[1])/((L.startPos[0] - L.endPos[0])+1*(L.startPos[0] == L.endPos[0]))
-                if slope > 0:
-                    rayY = [int(x*slope + min(L.endPos[1],L.startPos[1])) for x in range(0, L.startPos[0] - L.endPos[0]+1)]
-                else:
-                    rayY = [int(x*slope + max(L.endPos[1],L.startPos[1])) for x in range(0, L.startPos[0] - L.endPos[0]+1)]
-            else:
-                rayX = [x for x in range(L.startPos[0], L.endPos[0]+1)]
-                slope = (L.endPos[1] - L.startPos[1])/((L.endPos[0] - L.startPos[0])+1*(L.startPos[0] == L.endPos[0]))
-                if slope > 0:
-                    rayY = [int(x*slope + min(L.endPos[1],L.startPos[1])) for x in range(0, L.endPos[0] - L.startPos[0]+1)]
-                else:
-                    rayY = [int(x*slope + max(L.endPos[1],L.startPos[1])) for x in range(0, L.endPos[0] - L.startPos[0]+1)]
-            for points in range(0,len(rayX)):
-                if rayX[points] in range(pygame.mouse.get_pos()[0]-4,pygame.mouse.get_pos()[0]+5) and rayY[points] in range(pygame.mouse.get_pos()[1]-4, pygame.mouse.get_pos()[1]+5):
-                    break
-                pygame.draw.circle(self.surface,self.color,(rayX[points],rayY[points]),1)
-        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2+self.range,self.yPos+self.ySize/2,self.rotation)))
-        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2+(self.range*math.sqrt(2)/2),self.yPos+self.ySize/2-(self.range*math.sqrt(2)/2),self.rotation))
-        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2-self.range,self.yPos+self.ySize/2,self.rotation))
-        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2-(self.range*math.sqrt(2)/2),self.yPos+self.ySize/2-(self.range*math.sqrt(2)/2),self.rotation))
-        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2,self.yPos+self.ySize/2+self.range,self.rotation))
-        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2,self.yPos+self.ySize/2-self.range,self.rotation))
-    
-    def rayEndPoint(self, endPoint:tuple[int,int]) -> tuple[int,int]:
+    def drawRays(self, lines:list):
         
-        return endPoint
+        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2+self.range,self.yPos+self.ySize/2,self.rotation), lines))
+        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2+(self.range*math.sqrt(2)/2),self.yPos+self.ySize/2-(self.range*math.sqrt(2)/2),self.rotation), lines))
+        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2-self.range,self.yPos+self.ySize/2,self.rotation), lines))
+        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2-(self.range*math.sqrt(2)/2),self.yPos+self.ySize/2-(self.range*math.sqrt(2)/2),self.rotation), lines))
+        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2,self.yPos+self.ySize/2+self.range,self.rotation), lines))
+        pygame.draw.line(self.surface, self.color, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2,self.yPos+self.ySize/2-self.range,self.rotation),lines))
+    
+    def rayEndPoint(self, endPoint:tuple[int,int], lines:list) -> tuple[int,int]:
+        x, y = endPoint
+        line1=((self.xPos+self.xSize/2, self.yPos+self.ySize/2),(endPoint[0], endPoint[1]))
+        for L in lines:
+            line2 = ((L.startPos[0], L.startPos[1]), (L.endPos[0], L.endPos[1]))
+            xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+            ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
+
+            def det(a, b):
+                return a[0] * b[1] - a[1] * b[0]
+
+            div = det(xdiff, ydiff)
+            if div == 0:
+                pass
+            else:
+                d = (det(*line1), det(*line2))
+                x = det(d, xdiff) / div
+                y = det(d, ydiff) / div
+                
+        distX, distY = x - line1[0][0], y - line1[0][1]
+        dist = math.sqrt(distX**2+distY**2)
+        isInRightDirection=(((x>line1[0][0] and line1[1][0]>line1[0][0])or(x<line1[0][0] and line1[1][0]<line1[0][0]))or((y>line1[0][1] and line1[1][1]>line1[0][1])or(y<line1[0][1] and line1[1][1]<line1[0][1])))
+        if (x,y) == (-1,-1) or dist>self.range or not isInRightDirection:
+            return endPoint
+        return x, y
+
+
+
