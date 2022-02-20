@@ -1,3 +1,4 @@
+import json
 import pygame
 from border import Border
 from gameMode import GameMode
@@ -47,6 +48,7 @@ class GameLoop():
             self.line.endPos = pygame.mouse.get_pos()
             self.lines.append(self.line)
             self.line.draw()
+            self.save()
         if self.clickRD and self.gameMode.mode == GameModes.BUILD:#deletelines :(
             for L in self.lines:
                 if L.startPos[0] > L.endPos[0]: 
@@ -68,6 +70,7 @@ class GameLoop():
                         self.lines.remove(L)
                         break
         if self.gameMode.mode != GameModes.BUILD and self.drawingLine:
+            self.save()
             self.drawingLine = False
     def carUpdate(self):
         if self.gameMode.mode == GameModes.CAR and not self.car.isPlaced and not self.clickLD:
@@ -134,3 +137,10 @@ class GameLoop():
                     self.car.right = False
                 if event.key == pygame.K_DOWN:
                     self.car.down = False
+    def save(self):
+        print("saved")
+        with open("save.json", "w") as outfile:
+            for L in self.lines:
+                json.dump(vars(L),outfile)
+    def to_json(self,obj):#kullanımda deil
+        return json.dumps(obj, default=lambda obj: obj.__dict__)
