@@ -1,4 +1,6 @@
+from collections import namedtuple
 import json
+from turtle import Screen
 import pygame
 from border import Border
 from gameMode import GameMode
@@ -16,6 +18,7 @@ class GameLoop():
         self.gameMode = GameMode(GameModes.BUILD,self.screen)
         self.drawingLine=False
         self.running = True
+        self.load()
 
     def loop(self):
         pygame.display.set_caption("Game")
@@ -68,6 +71,7 @@ class GameLoop():
                 for points in range(0,len(rayX)):
                     if rayX[points] in range(pygame.mouse.get_pos()[0]-4,pygame.mouse.get_pos()[0]+5) and rayY[points] in range(pygame.mouse.get_pos()[1]-4, pygame.mouse.get_pos()[1]+5):
                         self.lines.remove(L)
+                        self.save()
                         break
         if self.gameMode.mode != GameModes.BUILD and self.drawingLine:
             self.save()
@@ -138,9 +142,18 @@ class GameLoop():
                 if event.key == pygame.K_DOWN:
                     self.car.down = False
     def save(self):
-        print("saved")
+        pointsToSave = {}
+        for a in range(len(self.lines)):
+            self.lines[a].__dict__
+            pointsToSave.update({a:{"s" : self.lines[a].startPos, "e" : self.lines[a].endPos}})
+
+        json_object = json.dumps(pointsToSave, indent = 2)
         with open("save.json", "w") as outfile:
-            for L in self.lines:
-                json.dump(vars(L),outfile)
-    def to_json(self,obj):#kullanımda deil
-        return json.dumps(obj, default=lambda obj: obj.__dict__)
+            outfile.write(json_object)
+
+    def load(self):
+        file = open("save.json")
+        j = json.load(file)
+        for i in range(len(j)):
+            self.lines.append(Border(self.screen,j[str(i)]['s'],j[str(i)]['e']))
+
