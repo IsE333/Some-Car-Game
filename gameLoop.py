@@ -11,7 +11,7 @@ class GameLoop():
         self.screen = pygame.display.set_mode((self.cw, self.ch), pygame.FULLSCREEN)
         self.lines = []
         self.deletedLines = []
-        self.car = Car(self.screen, 0, 0, 6.6, 0, False)
+        self.car = Car(self.screen, 0, 0, 9.9, 0, False)
         self.gameMode = GameMode(GameModes.BUILD,self.screen)
         self.drawingLine=False
         self.running = True
@@ -38,7 +38,7 @@ class GameLoop():
     def lineUpdate(self):
         if self.clickLD and self.gameMode.mode == GameModes.BUILD:
             self.drawingLine = True
-            self.line = Border(self.screen, (255,255,0), pygame.mouse.get_pos(), pygame.mouse.get_pos(), (255,128,128))
+            self.line = Border(self.screen, pygame.mouse.get_pos(), pygame.mouse.get_pos())
         elif self.drawingLine and not self.clickLU and self.gameMode.mode == GameModes.BUILD:
             self.line.endPos = pygame.mouse.get_pos()
             self.line.draw()
@@ -82,6 +82,7 @@ class GameLoop():
     def runUpdate(self):
         if self.car.isPlaced and self.gameMode.mode == GameModes.RUN:
             self.car.update()
+            self.car.drawRays(self.lines)
     def draw(self):
         for L in self.lines:
             L.draw()

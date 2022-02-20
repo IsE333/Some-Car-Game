@@ -2,7 +2,7 @@ import math
 import drawable
 import pygame
 class Rectangle(drawable.Drawable):
-    def __init__(self, surface, color, xPos, yPos, xSize, ySize, rot) -> None:
+    def __init__(self, surface, color, xPos, yPos, xSize, ySize, rot:float) -> None:
         super().__init__(surface, color)
         self.xPos, self.yPos, self.xSize, self.ySize = xPos, yPos, xSize, ySize
         self.rotation = rot
@@ -18,8 +18,8 @@ class Rectangle(drawable.Drawable):
         pygame.draw.line(self.surface, self.color, (p2x,p2y), (p3x,p3y), 2)
         pygame.draw.line(self.surface, self.color, (p3x,p3y), (p4x,p4y), 2)
         pygame.draw.line(self.surface, self.color, (p4x,p4y), (p1x,p1y), 2)
-    def rotate(self, ox, oy, px, py, angle):
+    def rotate(self, ox, oy, px, py, angle) -> tuple[int,int]:
         qx = ox + math.cos(angle) * (px - ox) - math.sin(angle) * (py - oy)
         qy = oy + math.sin(angle) * (px - ox) + math.cos(angle) * (py - oy)
-        return qx, qy
+        return int(qx), int(qy)
         
