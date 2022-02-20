@@ -38,18 +38,16 @@ class Car(Rectangle):
         self.speedMeter.text = str(self.speed)[0:6]
         self.speedMeter.draw()
     def drawRays(self, lines:list):
-        
-        pygame.draw.line(self.surface, self.rayColor, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2+self.range,self.yPos+self.ySize/2,self.rotation), lines))
-        pygame.draw.line(self.surface, self.rayColor, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2+(self.range*math.sqrt(2)/2),self.yPos+self.ySize/2-(self.range*math.sqrt(2)/2),self.rotation), lines))
-        pygame.draw.line(self.surface, self.rayColor, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2-self.range,self.yPos+self.ySize/2,self.rotation), lines))
-        pygame.draw.line(self.surface, self.rayColor, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2-(self.range*math.sqrt(2)/2),self.yPos+self.ySize/2-(self.range*math.sqrt(2)/2),self.rotation), lines))
-        pygame.draw.line(self.surface, self.rayColor, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2,self.yPos+self.ySize/2+self.range,self.rotation), lines))
-        pygame.draw.line(self.surface, self.rayColor, (self.xPos+self.xSize/2,self.yPos+self.ySize/2), self.rayEndPoint(self.rotate(self.xPos+self.xSize/2,self.yPos+self.ySize/2,self.xPos+self.xSize/2,self.yPos+self.ySize/2-self.range,self.rotation),lines))
-    
+        center=(self.xPos+self.xSize/2, self.yPos+self.ySize/2)
+        pygame.draw.line(self.surface, self.rayColor, center, self.rayEndPoint(self.rotate(center[0],center[1],center[0]+self.range,center[1],self.rotation), lines))
+        pygame.draw.line(self.surface, self.rayColor, center, self.rayEndPoint(self.rotate(center[0],center[1],center[0]+(self.range*math.sqrt(2)/2),center[1]-(self.range*math.sqrt(2)/2),self.rotation), lines))
+        pygame.draw.line(self.surface, self.rayColor, center, self.rayEndPoint(self.rotate(center[0],center[1],center[0]-self.range,self.yPos+self.ySize/2,self.rotation), lines))
+        pygame.draw.line(self.surface, self.rayColor, center, self.rayEndPoint(self.rotate(center[0],center[1],center[0]-(self.range*math.sqrt(2)/2),center[1]-(self.range*math.sqrt(2)/2),self.rotation), lines))
+        pygame.draw.line(self.surface, self.rayColor, center, self.rayEndPoint(self.rotate(center[0],center[1],center[0],center[1]+self.range,self.rotation), lines))
+        pygame.draw.line(self.surface, self.rayColor, center, self.rayEndPoint(self.rotate(center[0],center[1],center[0],center[1]-self.range,self.rotation),lines))
     def rayEndPoint(self, endPoint:tuple[int,int], lines:list) -> tuple[int,int]:
         x, y = endPoint
         line1=((self.xPos+self.xSize/2, self.yPos+self.ySize/2),(endPoint[0], endPoint[1]))
-        line2=((0,0),(0,0))
         for L in lines:
             line2 = ((L.startPos[0], L.startPos[1]), (L.endPos[0], L.endPos[1]))
             xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
@@ -57,27 +55,15 @@ class Car(Rectangle):
 
             def det(a, b):
                 return a[0] * b[1] - a[1] * b[0]
-
             div = det(xdiff, ydiff)
-            if div == 0:
-                pass
-            else:
+            if div != 0:
                 d = (det(*line1), det(*line2))
                 nx = det(d, xdiff) / div
                 ny = det(d, ydiff) / div
-                if self.dist((nx,ny),line1[0]) < self.dist((x,y),line1[0]):
+                isBetweenPoints = (line2[1][0]<nx<line2[0][0] or line2[1][0]>nx>line2[0][0])
+                isInRightDirection=(nx>line1[0][0] and line1[1][0]>line1[0][0])or(nx<line1[0][0] and line1[1][0]<line1[0][0])
+                if self.dist((nx,ny),line1[0]) < self.dist((x,y),line1[0]) and isBetweenPoints and isInRightDirection:
                     x,y = nx,ny
-        
-        distX, distY = x - line1[0][0], y - line1[0][1]
-        dist = math.sqrt(distX**2+distY**2)
-
-        isBetweenPoints = (line2[1][0]<x<line2[0][0] or line2[1][0]>x>line2[0][0])
-        
-        isInRightDirection=(((x>line1[0][0] and line1[1][0]>line1[0][0])or(x<line1[0][0] and line1[1][0]<line1[0][0]))or((y>line1[0][1] and line1[1][1]>line1[0][1])or(y<line1[0][1] and line1[1][1]<line1[0][1])))
-        #isInRightDirection=((x>line1[1][0]>line1[0][0]or x<line1[1][0]<line1[0][0])or(y>line1[1][1]>line1[0][1]or y<line1[1][1]<line1[0][1]))
-        if dist>self.range or not isInRightDirection or not isBetweenPoints:
-            return endPoint
-        print(x,y)
         return x, y
     def dist(self,a:tuple[int,int],b:tuple[int,int]):
         return math.sqrt((a[0]-b[0])**2+(a[1]-b[1])**2)

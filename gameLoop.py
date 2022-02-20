@@ -82,12 +82,12 @@ class GameLoop():
     def runUpdate(self):
         if self.car.isPlaced and self.gameMode.mode == GameModes.RUN:
             self.car.update()
-            self.car.drawRays(self.lines)
     def draw(self):
         for L in self.lines:
             L.draw()
         if self.car.isPlaced:
             self.car.draw()
+            self.car.drawRays(self.lines)
             
         self.gameMode.drawButtonsAndCurrentMode(self.clickLD)
         pygame.display.update()
